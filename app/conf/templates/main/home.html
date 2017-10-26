@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+		<div class="col-md-3">
+			<img class='forca' src="{% static 'img/forca.png' %}" alt="">
+			<div id="context-forca">
+			<!--<img class='bracodireito' src="{% static 'img/bracodireito.png' %}" alt="">
+			<img class='bracoesquerdo' src="{% static 'img/bracoesquerdo.png' %}" alt="">
+			<img class='cabeca' src="{% static 'img/cabeca.png' %}" alt="">
+			<img class='corpo' src="{% static 'img/corpo.png' %}" alt="">
+			<img class='pernadireita' src="{% static 'img/pernadireita.png' %}" alt="">
+			<img class='pernaesquerda' src="{% static 'img/pernaesquerda.png' %}" alt="">-->
+			</div>
+		</div>
+		<div class="col-md-9 game">
+			<div class="row" id="actions-game">
+				<div class="msg"></div>
+
+				<div class="buttons">
+					<button class="btn btn-primary start">sortear palavra</button>
+				</div>
+
+				<form method="post" action="/main/assert_word/">
+					{% csrf_token %}
+					<input maxlength="1" type="text" name="key" id="id_key" required="true" />
+					<input type="submit" class="btn btn-success" />
+				</form>
+			</div>
+
+			<div class="row" id="context-game">
+				<div class="col-md-3" id="info-context-game"></div>
+				<div class="col-md-6" id="assert-word-context-game"></div>
+			</div>
+		</div>
+{% endblock %}
+
+{% block extra_scripts %}
+	<script type="text/javascript">
+
+	$(function(){
+
+		function mount_context_words(length){
+			var context_word = '';
+			for(i=0;i<length;i+=1){
+				context_word += '<div class="word-context-game">-</div>';
+			}
+			return context_word;
+		}
+
+		function mount_context_info(data){
+			var context_info = '<h3>'+data.message+'</h3>'+
+							   '<p><strong>Total de letras:</strong> '+data.context.len_words+'</p>'+
+							   '<strong>Erros:</strong> '+data.context.count_error;
+			return context_info;
+		}
+
+		function get_img_forca(item){
+			options = {
+				1:'<img class="cabeca" src="/static/img/cabeca.png" alt="">',
+				2:'<img class="corpo" src="/static/img/corpo.png" alt="">',
+				3:'<img class="bracodireito" src="/static/img/bracodireito.png" alt="">',
+				4:'<img class="bracoesquerdo" src="/static/img/bracoesquerdo.png" alt="">',
+				5:'<img class="pernadireita" src="/static/img/pernadireita.png" alt="">',
+				6:'<img class="pernaesquerda" src="/static/img/pernaesquerda.png" alt="">',
+			}
+			return options[item];
+		}
+
+		function replaceWord(index, key, element){
+			element.children[index].innerHTML = key;
+		}
+
+		$('.game').on('click', '.over', function(e){
+			e.preventDefault();
+			btn = $(this);
+			controlls_game = btn.parents('.game');
+			actions_game = controlls_game.find("#actions-game");
+			context_game = controlls_game.find("#context-game");
+			context_forca = $('#context-forca');
+
+			$.ajax({
+				type:'get',
+				url:'/main/clear_sessions/',
+				dataType: 'json',
+				beforeSend:function(){
+					console.log('OLA MUNDO BEFORESEND');
+					actions_game.find('.msg').html('');
+					actions_game.find('input[type^="submit"]').prop('disabled', false);
+					btn.prop('disabled', true);
+				},
+				success:function(data, func, object){
+					console.log('OLA MUNDO SUCCESS');
+					btn.remove();
+					actions_game.find('.buttons').append('<button class="btn btn-primary start">sortear palavra</button>');
+					context_game.find('#info-context-game').html('');
+					context_game.find('#assert-word-context-game').html('');
+					context_forca.empty();
+				},
+				error:function(){
+					console.log('OLA MUNDO ERROR');
+					btn.prop('disabled', false);
+					actions_game.find('.msg').html('<h3>Não foi possivel resetar o game, tente novamente.</h3>');
+				},
+			});
+		});
+
+
+		$('.game').on('click', '.start', function(e){
+			e.preventDefault();
+			btn = $(this);
+			controlls_game = btn.parents('.game');
+			actions_game = controlls_game.find("#actions-game");
+			context_game = controlls_game.find("#context-game");
+
+			$.ajax({
+				type:'get',
+				url:'/main/sort/',
+				dataType: 'json',
+				beforeSend:function(){
+					console.log('OLA MUNDO BEFORESEND');
+					actions_game.find('.msg').html('');
+					btn.prop('disabled', true);
+					actions_game.find('input[type^="submit"]').prop('disabled', false);
+				},
+				success:function(data, func, object){
+					console.log('OLA MUNDO SUCCESS');
+					btn.remove();
+					actions_game.find('.buttons').append('<button class="btn btn-danger over">recomeçar o jogo</button>');
+					if(object.status == 201){
+						context_game.find('#info-context-game').html(mount_context_info(data));
+						context_game.find('#assert-word-context-game').append(mount_context_words(data.context.len_words));
+					}
+					console.log(data);
+				},
+				error:function(){
+					console.log('OLA MUNDO ERROR');
+					btn.prop('disabled', false);
+					actions_game.find('.msg').html('<h3>Não foi possivel sortear a palavra, tente novamente.</h3>');
+				},
+			});
+		});
+
+		$('form').on('submit', function(e){
+			e.preventDefault();
+			form = $(this);
+			btn_submit = form.find('input[type^="submit"]');
+			controlls_game = form.parents('.game');
+			actions_game = controlls_game.find("#actions-game");
+			context_game = controlls_game.find("#context-game");
+
+			$.ajax({
+				type: form.attr('method'),
+				url: form.attr('action'),
+				dataType: 'json',
+				data: form.serialize(),
+				beforeSend:function(){
+					console.log('OLA MUNDO BEFORESEND');
+					actions_game.find('.msg').html('');
+					btn_submit.prop('disabled', true);
+				},
+				success:function(data){
+					console.log(data);
+					console.log(context_game.find('#info-context-game'));
+					if(data.context.key){
+						$('#assert-word-context-game')[0].append(data.context.key);
+					}
+
+					if(!(context_game.find('#info-context-game')[0].outerText) &&
+						!(context_game.find('#assert-word-context-game')[0].outerText)){
+						controlls_game.find('.start').remove();
+						actions_game.find('.buttons').html('<button class="btn btn-danger over">recomeçar o jogo</button>');
+						actions_game.find('.msg').html('<h3>Jogo em andamento, recomece ...</h3>');
+					}else if(data.context.result == 'false' || data.context.result == 'finish'){
+						context_game.find('#info-context-game').html(mount_context_info(data));
+					}else if(data.context.index_word.length > 0){
+						element_words = $('#assert-word-context-game')[0];
+						console.log(data.context.index_word);
+						console.log(data.context.key);
+						for(i=0;i<data.context.index_word.length;i++){
+							console.log(data.context.index_word[i]);
+							replaceWord(data.context.index_word[i], data.context.key, element_words);
+						}
+					}else{
+						console.log(get_img_forca(data.context.count_error));
+						$('#context-forca').append(get_img_forca(data.context.count_error));
+						context_game.find('#info-context-game')[0].lastChild.data = ' '+data.context.count_error;
+					}
+				},
+				error:function(data){
+					console.log('OLA MUNDO ERROR');
+					btn_submit.prop('disabled', false);
+					actions_game.find('.msg').html('<h3>'+data.responseJSON.message+'</h3>');
+				},
+				complete:function(){
+					btn_submit.prop('disabled', false);
+					form.find('input[id^="id_key"]')[0].value = '';
+
+				},
+			});
+		});
+
+		/*setTimeout(function(){
+			$('#conteudo-forca').append('<img class="cabeca" src="/static/img/cabeca.png" alt="">');
+			$('#conteudo-forca').append('<img class="corpo" src="/static/img/corpo.png" alt="">');
+			$('#conteudo-forca').append('<img class="bracodireito" src="/static/img/bracodireito.png" alt="">');
+			$('#conteudo-forca').append('<img class="bracoesquerdo" src="/static/img/bracoesquerdo.png" alt="">');
+			$('#conteudo-forca').append('<img class="pernadireita" src="/static/img/pernadireita.png" alt="">');
+			$('#conteudo-forca').append('<img class="pernaesquerda" src="/static/img/pernaesquerda.png" alt="">');
+		},2000);*/
+	});
+
+	</script>
+{% endblock %}
