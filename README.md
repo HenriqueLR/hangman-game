@@ -1,9 +1,16 @@
 
-##### REQUISITOS
+##### REQUIREMENTS
 
-Docker
+* docker.io
 
+##### INSTALL
 
-##### INSTALAR
+make setup
 
-./install.sh
+##### RUN
+
+make run
+
+##### DESCRIPTION
+
+Game hangman good fun ;)
