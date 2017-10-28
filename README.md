@@ -1,1 +1,9 @@
-teste
+
+##### REQUISITOS
+
+Docker
+
+
+##### INSTALAR
+
+./install.sh
