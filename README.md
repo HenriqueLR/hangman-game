@@ -1,15 +1,27 @@
 
 ##### REQUIREMENTS
 
-* docker.io
+docker.io
+
+Chrome browser
+
 
 ##### INSTALL
 
-make setup
+make setup or ./setup.sh
+
 
 ##### RUN
 
-make run
+make collectstatic
+
+make run or ./run.sh
+
+
+##### TEST
+
+http://localhost
+
 
 ##### DESCRIPTION
 
