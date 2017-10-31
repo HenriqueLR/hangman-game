@@ -9,8 +9,11 @@ clean:
 setup:
 	./setup.sh
 
-run:
-	./run.sh
+run_uwsgi:
+	./runserver.sh uwsgi
+
+run_gunicorn:
+	./runserver.sh gunicorn
 
 collectstatic:
 	./app/manage.py collectstatic
