@@ -17,3 +17,13 @@ run_gunicorn:
 
 collectstatic:
 	./app/manage.py collectstatic
+
+populate_db:
+	./app/conf/populate_words.py
+
+clean_db:
+	@find . -name "*.sqlite3" | xargs rm -f
+
+create_db:
+	./app/manage.py makemigrations ;\
+	./app/manage.py migrate ;\

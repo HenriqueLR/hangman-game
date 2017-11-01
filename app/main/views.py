@@ -20,7 +20,7 @@ def sort(request):
 		count_words = words.count()
 		sort_word = words.get(id_words=randint(1, count_words))
 
-		request.session['word'] = sort_word.word
+		request.session['word'] = sort_word.word.lower()
 		request.session['count_error'] = 0
 		request.session['count_assert'] = 0
 
@@ -69,7 +69,7 @@ def assert_word(request):
 			data['message'] = 'Não é possivel escolher uma letra, antes de sortear uma palavra'
 			return JsonResponse(data, status=403)
 
-		key = request.POST.get('key')
+		key = request.POST.get('key').lower()
 		word = request.session['word']
 		index_word = []
 

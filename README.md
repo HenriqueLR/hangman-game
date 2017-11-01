@@ -13,13 +13,11 @@ make setup or ./setup.sh
 
 ##### RUN
 
-make collectstatic
+	make run_uwsgi or make run_gunicorn
 
-make run_uwsgi or make run_gunicorn
+	or
 
-or
-
-./runserver.sh uwsgi or ./runserver.sh gunicorn
+	./runserver.sh uwsgi or ./runserver.sh gunicorn
 
 
 ##### TEST
