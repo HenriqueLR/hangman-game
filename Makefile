@@ -27,3 +27,6 @@ clean_db:
 create_db:
 	./app/manage.py makemigrations ;\
 	./app/manage.py migrate ;\
+
+connect:
+	./env/connect-container.sh hangman

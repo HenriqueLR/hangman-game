@@ -1,17 +1,17 @@
 
-##### REQUIREMENTS
+##### Requisitos
 
-docker.io
+	docker.io
 
-Chrome browser
-
-
-##### INSTALL
-
-make setup or ./setup.sh
+	Chrome browser
 
 
-##### RUN
+##### Instalação
+
+	make setup or ./setup.sh
+
+
+##### Start Server
 
 	make run_uwsgi or make run_gunicorn
 
@@ -20,11 +20,18 @@ make setup or ./setup.sh
 	./runserver.sh uwsgi or ./runserver.sh gunicorn
 
 
-##### TEST
+##### Colocando palavras no jogo
 
-http://localhost
+	Carrege um arquivo como de exemplo /env/db/words.csv
+
+	make populate_db
 
 
-##### DESCRIPTION
+##### Acessando o game
 
-Game hangman good fun ;)
+	http://localhost
+
+
+##### Descrição
+
+	Jogo da forca.
