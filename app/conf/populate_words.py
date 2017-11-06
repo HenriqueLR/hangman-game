@@ -12,7 +12,6 @@ from conf import settings
 from main.models import Words
 
 
-
 class PopulateDB(object):
 	'''
 	Import csv file and populate
@@ -40,8 +39,12 @@ class PopulateDB(object):
 
 
 if __name__ == '__main__':
-	populate = PopulateDB()
-	populate.import_csv_words()
-	print ('Total de palavras repetidas: %s\nError: %s') % \
-			(populate._total_errors_integrity, populate._msg_error_integrity)
+	try:
+		populate = PopulateDB()
+		populate.import_csv_words()
 
+		if populate._total_errors_integrity:
+			print ('Total de palavras repetidas: %s\nError: %s') % \
+				(populate._total_errors_integrity, populate._msg_error_integrity)
+	except Exception as error:
+		print error

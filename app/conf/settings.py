@@ -102,5 +102,5 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR,'static_files')
 STATIC_URL = '/static/'
 
-FILE_WORDS = 'env/config/db/words.csv'
+FILE_WORDS = 'env/db/words.csv'
 FILE_PATH_WORDS = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), FILE_WORDS)

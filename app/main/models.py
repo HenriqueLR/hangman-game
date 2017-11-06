@@ -1,4 +1,5 @@
 from django.db import models
+from main.utils import remove_special_word
 
 
 
@@ -11,6 +12,10 @@ class Words(models.Model):
 
 	def __unicode__(self):
 		return (u'%s') % (self.word)
+
+	def save(self, *args, **kwargs):
+		self.word = remove_special_word(self.word)
+		super(Words, self).save(*args, **kwargs)
 
 	class Meta:
 		verbose_name = 'Word'
