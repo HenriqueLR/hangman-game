@@ -15,6 +15,9 @@ run_uwsgi:
 run_gunicorn:
 	./runserver.sh gunicorn
 
+run:
+	./app/manage.py runserver 0.0.0.0:8008
+
 collectstatic:
 	./app/manage.py collectstatic
 

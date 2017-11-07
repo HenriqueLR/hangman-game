@@ -84,13 +84,13 @@
 				url:'/main/clear_sessions/',
 				dataType: 'json',
 				beforeSend:function(){
-					console.log('OLA MUNDO BEFORESEND');
+
 					actions_game.find('.msg').html('');
 					actions_game.find('input[type^="submit"]').prop('disabled', false);
 					btn.prop('disabled', true);
 				},
 				success:function(data, func, object){
-					console.log('OLA MUNDO SUCCESS');
+
 					btn.remove();
 					actions_game.find('.buttons').append('<button class="btn btn-primary start">sortear palavra</button>');
 					context_game.find('#info-context-game').html('');
@@ -98,7 +98,7 @@
 					context_forca.empty();
 				},
 				error:function(){
-					console.log('OLA MUNDO ERROR');
+
 					btn.prop('disabled', false);
 					actions_game.find('.msg').html('<h3>Não foi possivel resetar o game, tente novamente.</h3>');
 				},
@@ -118,23 +118,23 @@
 				url:'/main/sort/',
 				dataType: 'json',
 				beforeSend:function(){
-					console.log('OLA MUNDO BEFORESEND');
+
 					actions_game.find('.msg').html('');
 					btn.prop('disabled', true);
 					actions_game.find('input[type^="submit"]').prop('disabled', false);
 				},
 				success:function(data, func, object){
-					console.log('OLA MUNDO SUCCESS');
+
 					btn.remove();
 					actions_game.find('.buttons').append('<button class="btn btn-danger over">recomeçar o jogo</button>');
 					if(object.status == 201){
 						context_game.find('#info-context-game').html(mount_context_info(data));
 						context_game.find('#assert-word-context-game').append(mount_context_words(data.context.len_words));
 					}
-					console.log(data);
+
 				},
 				error:function(){
-					console.log('OLA MUNDO ERROR');
+
 					btn.prop('disabled', false);
 					actions_game.find('.msg').html('<h3>Não foi possivel sortear a palavra, tente novamente.</h3>');
 				},
@@ -155,13 +155,13 @@
 				dataType: 'json',
 				data: form.serialize(),
 				beforeSend:function(){
-					console.log('OLA MUNDO BEFORESEND');
+
 					actions_game.find('.msg').html('');
 					btn_submit.prop('disabled', true);
 				},
 				success:function(data){
-					console.log(data);
-					console.log(context_game.find('#info-context-game'));
+
+
 					if(data.context.key){
 						$('#assert-word-context-game')[0].append(data.context.key);
 					}
@@ -175,20 +175,20 @@
 						context_game.find('#info-context-game').html(mount_context_info(data));
 					}else if(data.context.index_word.length > 0){
 						element_words = $('#assert-word-context-game')[0];
-						console.log(data.context.index_word);
-						console.log(data.context.key);
+
+
 						for(i=0;i<data.context.index_word.length;i++){
-							console.log(data.context.index_word[i]);
+
 							replaceWord(data.context.index_word[i], data.context.key, element_words);
 						}
 					}else{
-						console.log(get_img_forca(data.context.count_error));
+
 						$('#context-forca').append(get_img_forca(data.context.count_error));
 						context_game.find('#info-context-game')[0].lastChild.data = ' '+data.context.count_error;
 					}
 				},
 				error:function(data){
-					console.log('OLA MUNDO ERROR');
+
 					btn_submit.prop('disabled', false);
 					actions_game.find('.msg').html('<h3>'+data.responseJSON.message+'</h3>');
 				},
