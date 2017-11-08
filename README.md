@@ -1,12 +1,14 @@
 
 ##### Requisitos
 
-	docker.io
+* docker.io
 
-	Chrome browser
+* Chrome browser
 
 
 ##### Instalação
+
+Recomendável que utilize virtualenv
 
 	make setup
 
@@ -16,17 +18,26 @@
 	make run_uwsgi or  make run_gunicorn
 	http://localhost
 
-	runserver local interactive:
+
+observação:
+	Para ativar a aplicação no modo debug e ter a interatividade no console:
+
 		make run
 		http://localhost:8008
 
 
 ##### Inserindo palavras no jogo
 
-	Carrege um arquivo como de exemplo /env/db/words.csv
-	make populate_db
+É possivel inserir palavras no jogo de duas maneiras:
 
-	http://localhost/security
+	1 - Carrege um ou mais arquivos dentro do diretório /env/db/
+
+		ex: /env/db/words.csv
+		make populate_db
+
+	2 - Acesse a área do administrador
+
+		http://localhost/security
 
 
 ##### Descrição

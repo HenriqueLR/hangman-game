@@ -6,7 +6,7 @@ install:
 clean:
 	@find . -name "*.pyc" | xargs rm -f
 
-setup:
+setup: install
 	./setup.sh
 
 run_uwsgi:

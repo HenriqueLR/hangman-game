@@ -21,7 +21,7 @@ class PopulateDB(object):
 	_msg_error_integrity = str()
 
 	def __init__(self):
-		self.file_words = settings.FILE_PATH_WORDS
+		self.file_path_words = settings.FILE_PATH_WORDS
 
 	def insert_word(self, word):
 		try:
@@ -31,10 +31,11 @@ class PopulateDB(object):
 			self._msg_error_integrity = e.message
 
 	def import_csv_words(self):
-		with open(self.file_words, 'r') as f:
-			reader = csv.DictReader(f)
-			for row in reader:
-				self.insert_word(row['word'])
+		for file in os.listdir(self.file_path_words):
+			with open(''.join([self.file_path_words, file]), 'r') as f:
+				reader = csv.DictReader(f)
+				for row in reader:
+					self.insert_word(row['word'])
 		return True
 
 
