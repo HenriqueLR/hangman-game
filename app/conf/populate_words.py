@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 #coding: utf-8
 
-import os, sys, csv, django
+import os, sys, csv, django, argparse
+
+parser = argparse.ArgumentParser(description='Populate words csv file in database')
+parser.add_argument('-c', '--conf', dest='settings', help='name settings file ex: settings')
+args = parser.parse_args()
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings_production')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', args.settings)
 django.setup()
 
 from django.db.utils import IntegrityError
-from conf import settings
 from main.models import Words
+from utils import WordFile
+
 
 
 class PopulateDB(object):
@@ -21,7 +26,7 @@ class PopulateDB(object):
 	_msg_error_integrity = str()
 
 	def __init__(self):
-		self.file_path_words = settings.FILE_PATH_WORDS
+		self.config_word = WordFile()
 
 	def insert_word(self, word):
 		try:
@@ -31,8 +36,8 @@ class PopulateDB(object):
 			self._msg_error_integrity = e.message
 
 	def import_csv_words(self):
-		for file in os.listdir(self.file_path_words):
-			with open(''.join([self.file_path_words, file]), 'r') as f:
+		for file in self.config_word.get_files():
+			with open(''.join([self.config_word.get_path(), file]), 'r') as f:
 				reader = csv.DictReader(f)
 				for row in reader:
 					self.insert_word(row['word'])
@@ -41,6 +46,7 @@ class PopulateDB(object):
 
 if __name__ == '__main__':
 	try:
+		print 'Db file in: ' + os.environ['DJANGO_SETTINGS_MODULE']
 		populate = PopulateDB()
 		populate.import_csv_words()
 
@@ -49,3 +55,4 @@ if __name__ == '__main__':
 				(populate._total_errors_integrity, populate._msg_error_integrity)
 	except Exception as error:
 		print error
+		pass

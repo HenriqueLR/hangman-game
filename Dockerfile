@@ -14,8 +14,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN mkdir -p /deploy/apps/hangman-game/
 ADD . /deploy/apps/hangman-game/
 
-RUN apt-get update
-
 WORKDIR /deploy/apps/hangman-game
 RUN ./env/install.sh
 

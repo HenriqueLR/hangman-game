@@ -1,8 +1,36 @@
 #!/bin/bash -xe
 
-docker rm -f hangman || true
+argc=$#
+argv=($@)
 
-case $1 in
-	uwsgi) docker run -d -v "$(pwd):/deploy/apps/hangman-game" -p 0.0.0.0:80:80 --name "hangman" "hangman:v.0.1" ./env/services.sh uwsgi ;;
-	gunicorn) docker run -d -i -t -v "$(pwd):/deploy/apps/hangman-game" -p 0.0.0.0:80:80 --name "hangman" "hangman:v.0.1" ./env/services.sh gunicorn ;;
-esac
+Runserver(){
+	Remove;
+	docker run $opt "$(pwd):$workdir" -p $port --name "$image" "$image:$img_version" $services $server $ini;
+}
+
+Remove(){
+	docker rm -f $image || true;
+}
+
+Option(){
+	for ((i = 7; i <= $(( $argc - 1 )); i++)); do
+	    opt=$opt" "${argv[i]}
+	done
+}
+
+server=$1
+ini=$2
+image=$3
+img_version=$4
+workdir=$5
+port=$6
+services=$7
+Option
+
+Runserver
+
+if [ $server == uwsgi ] && [ $ini == local ]; then
+	tail -f uwsgi.log
+elif [ $server == gunicorn ] && [ $ini == local ]; then
+	tail -f gunicorn.log
+fi

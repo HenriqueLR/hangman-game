@@ -1,3 +1,6 @@
 #!/bin/bash -xe
 
-docker build -t "hangman:v.0.1" .
+image=$1
+version=$2
+
+docker build -t "$image:$version" .

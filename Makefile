@@ -1,35 +1,36 @@
 #makefile
+SHELL := /bin/bash
 
-install:
-	pip install -r requirements.txt
+install: permissions
+	@if [ $(env) == local ]; then \
+		pip install -r requirements.txt ;\
+	elif [ $(env) == production ]; then \
+		./conf/cfg.py setup ;\
+	fi
 
 clean:
-	@find . -name "*.pyc" | xargs rm -f
+	./conf/cfg.py clean
 
-setup: install
-	./setup.sh
-
-run_uwsgi:
-	./runserver.sh uwsgi
-
-run_gunicorn:
-	./runserver.sh gunicorn
-
-run:
-	./app/manage.py runserver 0.0.0.0:8008
+runserver:
+	./conf/cfg.py runserver $(server) $(ini)
 
 collectstatic:
-	./app/manage.py collectstatic
+	./conf/cfg.py collectstatic
 
 populate_db:
-	./app/conf/populate_words.py
+	./conf/cfg.py populate_db $(settings)
 
 clean_db:
-	@find . -name "*.sqlite3" | xargs rm -f
+	./conf/cfg.py clean_db
 
 create_db:
-	./app/manage.py makemigrations ;\
-	./app/manage.py migrate ;\
+	./conf/cfg.py create_db makemigrations,migrate $(settings)
 
 connect:
-	./env/connect-container.sh hangman
+	./conf/cfg.py connect
+
+create_superuser:
+	./conf/cfg.py create_superuser $(settings)
+
+permissions:
+	./conf/cfg.py permissions
