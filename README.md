@@ -67,32 +67,40 @@ development:
 
 ##### Comandos
 
-make clean
-	remove os arquivos .pyc dos diretorios do projeto
+1 - make clean
 
-make collectstatic
-	coleta os arquivos statics do projeto para /app/conf/static_files/
+* remove os arquivos .pyc dos diretorios do projeto
 
-make populate_db settings=[local/production]
+2 - make collectstatic
+
+* coleta os arquivos statics do projeto para /app/conf/static_files/
+
+3 - make populate_db settings=[local/production]
+
 	ex: make populate_db settings=production
 	carrega palavras usando arquivo especificado no settings
 
-make clean_db
-	remove o banco local
+4 - make clean_db
 
-make create_db settings=[local/production]
+* remove o banco local
+
+5 - make create_db settings=[local/production]
+
 	ex: make create_db settings=local
 	cria o banco usando o arquivo especificado no settings
 
-make connect
-	conecta no docker container
+6 - make connect
 
-make create_superuser settings=[local/production]
+* conecta no docker container
+
+7 - make create_superuser settings=[local/production]
+
 	ex: make create_superuser settings=local
 	cria o usuario no banco usando o arquivo especificado no settings
 
-make permissions
-	muda as permissões dos arquivos cfg.py / *.sh
+8 - make permissions
+
+* muda as permissões dos arquivos cfg.py / *.sh
 
 
 ##### Descrição

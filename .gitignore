@@ -1,11 +1,10 @@
 *.pyc
 *.egg-info
 *.py[co]
-*.tmp
 *.swp
 *.sqlite3
 *.tmp
-*.log
+*.ini
 __pycache__
 static_files/
 migrations/

@@ -13,7 +13,8 @@ django.setup()
 
 from django.db.utils import IntegrityError
 from main.models import Words
-from utils import WordFile
+from utils import init_parser_config
+from settings import BASE_DIR
 
 
 
@@ -26,7 +27,14 @@ class PopulateDB(object):
 	_msg_error_integrity = str()
 
 	def __init__(self):
-		self.config_word = WordFile()
+		self.config = init_parser_config()
+
+	def get_path(self):
+		return os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)),
+							self.config.get('env', 'PATH_DB'))
+
+	def get_files(self):
+		return filter(lambda x: x.endswith('.csv'), os.listdir(self.get_path()))
 
 	def insert_word(self, word):
 		try:
@@ -36,8 +44,8 @@ class PopulateDB(object):
 			self._msg_error_integrity = e.message
 
 	def import_csv_words(self):
-		for file in self.config_word.get_files():
-			with open(''.join([self.config_word.get_path(), file]), 'r') as f:
+		for file in self.get_files():
+			with open(''.join([self.get_path(), file]), 'r') as f:
 				reader = csv.DictReader(f)
 				for row in reader:
 					self.insert_word(row['word'])

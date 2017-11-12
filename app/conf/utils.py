@@ -14,16 +14,3 @@ def init_parser_config(file=None):
 		status, file = commands.getstatusoutput(command)
 	config.read(file)
 	return config
-
-
-
-class WordFile(object):
-	def __init__(self):
-		self.config = init_parser_config()
-
-	def get_path(self):
-		return os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)),
-							self.config.get('env', 'PATH_DB'))
-
-	def get_files(self):
-		return filter(lambda x: x.endswith('.csv'), os.listdir(self.get_path()))
