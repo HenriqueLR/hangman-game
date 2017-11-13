@@ -1,20 +1,12 @@
 #!/usr/bin/env python
 #coding: utf-8
 
-import importlib, commands, os, sys
-from ConfigParser import RawConfigParser
+import importlib, os, sys
 
+path_app = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(path_app)
 
-
-
-def init_parser_config(file=None):
-	config = RawConfigParser()
-	if not file:
-		path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-		command = ('%s %s %s') % ('find', path, '-name "*.conf.ini"')
-		status, file = commands.getstatusoutput(command)
-	config.read(file)
-	return config
+from app.conf.utils import init_parser_config
 
 
 def _get_commands(config, arg):
