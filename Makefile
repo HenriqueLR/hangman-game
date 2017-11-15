@@ -30,7 +30,7 @@ connect:
 	./conf/cfg.py connect
 
 create_superuser:
-	./conf/cfg.py create_superuser $(settings)
+	./conf/cfg.py create_superuser $(settings) syncdb
 
 permissions:
 	./conf/cfg.py permissions

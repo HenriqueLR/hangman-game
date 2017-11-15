@@ -26,6 +26,12 @@ development:
 	make install env=local
 
 
+Criar o superusuario do sistema, é obrigatório para acessar,
+a interface  de administração do sistema.
+
+	make create_superuser settings=local
+
+
 ##### Start Server
 
 Aplicação tem suporte para (uwsgi / gunicorn), recomendado para ambientes de produção,

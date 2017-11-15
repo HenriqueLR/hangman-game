@@ -42,10 +42,10 @@ class Commands(object):
 
 	def create_superuser(self, *args, **kwargs):
 		args = args[0]
-		path = self.config.get('app', 'PATH_CONF')
-		file = self.config.get('app', 'SUPERUSER_SCRIPT')
-		param = ('%s %s') % ('-c', self.config.get('app','SETTINGS_'+args[0].upper()))
-		command = ('%s%s%s %s') % ('./', path, file, param)
+		path = self.config.get('app', 'PATH')
+		file = self.config.get('app', 'MANAGE_SCRIPT')
+		param = ('%s%s') % ('--settings=conf.', self.config.get('app','SETTINGS_'+args[0].upper()))
+		command = ('%s%s%s %s %s') % ('./', path, file, args[1].lower(), param)
 		self.exec_command(command)
 
 	def runserver(self, *args, **kwargs):
