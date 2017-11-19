@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 #coding: utf-8
 
-import importlib, os, sys
+import importlib, os, sys, commands
+from ConfigParser import RawConfigParser
 
-path_app = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(path_app)
 
-from app.conf.utils import init_parser_config
 
+def init_parser_config(file=None):
+	config = RawConfigParser()
+	if not file:
+		path = os.path.dirname(os.path.abspath(__file__))
+		command = ('%s %s %s') % ('find', path, '-name "*.conf.ini"')
+		status, file = commands.getstatusoutput(command)
+	config.read(file)
+	return config
 
 def _get_commands(config, arg):
 	method = arg[1]
@@ -34,8 +40,8 @@ class Commands(object):
 
 	def populate_db(self, *args, **kwargs):
 		args = args[0]
-		path = self.config.get('app', 'PATH_CONF')
-		file = self.config.get('app', 'POPULATE_SCRIPT')
+		path = self.config.get('conf', 'PATH_CONF')
+		file = self.config.get('conf', 'POPULATE_SCRIPT')
 		param = ('%s %s') % ('-c', self.config.get('app','SETTINGS_'+args[0].upper()))
 		command = ('%s%s%s %s') % ('./', path, file, param)
 		self.exec_command(command)
