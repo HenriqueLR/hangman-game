@@ -38,14 +38,6 @@ class Commands(object):
 		command = ('%s%s %s') % ('./', file, param)
 		self.exec_command(command)
 
-	def populate_db(self, *args, **kwargs):
-		args = args[0]
-		path = self.config.get('conf', 'PATH_CONF')
-		file = self.config.get('conf', 'POPULATE_SCRIPT')
-		param = ('%s %s') % ('-c', self.config.get('app','SETTINGS_'+args[0].upper()))
-		command = ('%s%s%s %s') % ('./', path, file, param)
-		self.exec_command(command)
-
 	def create_superuser(self, *args, **kwargs):
 		args = args[0]
 		path = self.config.get('app', 'PATH')

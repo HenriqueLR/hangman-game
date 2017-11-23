@@ -18,7 +18,8 @@ collectstatic:
 	./conf/cfg.py collectstatic
 
 populate_db:
-	./conf/cfg.py populate_db $(settings)
+	@./app/manage.py collectstatic --noinput ;\
+	./app/conf/populate_words.py --conf=$(settings) ;\
 
 clean_db:
 	./conf/cfg.py clean_db

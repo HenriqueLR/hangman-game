@@ -2,19 +2,18 @@
 #coding: utf-8
 
 import os, sys, csv, django, argparse
-from cfg  import init_parser_config
+from django.db.utils import IntegrityError
+from settings import STATIC_ROOT, BASE_DIR
 
+settings = {'local':'settings', 'production':'settings_production'}
 parser = argparse.ArgumentParser(description='Populate words csv file in database')
 parser.add_argument('-c', '--conf', dest='settings', help='name settings file ex: settings')
 args = parser.parse_args()
 
-config = init_parser_config()
-sys.path.append(''.join([os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '/',
-						 config.get('app', 'PATH')]))
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', ''.join(['conf.', args.settings]))
+sys.path.append(os.path.dirname(BASE_DIR))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings[args.settings] if args.settings else 'settings')
 django.setup()
 
-from django.db.utils import IntegrityError
 from main.models import Words
 
 
@@ -27,12 +26,8 @@ class PopulateDB(object):
 	_total_errors_integrity = 0
 	_msg_error_integrity = str()
 
-	def __init__(self, config):
-		self.config = config
-
 	def get_path(self):
-		return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-				   			config.get('env', 'PATH_DB'))
+		return os.path.join(STATIC_ROOT, 'uploads')
 
 	def get_files(self):
 		return filter(lambda x: x.endswith('.csv'), os.listdir(self.get_path()))
@@ -46,7 +41,7 @@ class PopulateDB(object):
 
 	def import_csv_words(self):
 		for file in self.get_files():
-			with open(''.join([self.get_path(), file]), 'r') as f:
+			with open(os.path.join(self.get_path(), file), 'r') as f:
 				reader = csv.DictReader(f)
 				for row in reader:
 					self.insert_word(row['word'])
@@ -57,7 +52,7 @@ class PopulateDB(object):
 if __name__ == '__main__':
 	try:
 		print 'Db file in: ' + os.environ['DJANGO_SETTINGS_MODULE']
-		populate = PopulateDB(config)
+		populate = PopulateDB()
 		populate.import_csv_words()
 
 		if populate._total_errors_integrity:

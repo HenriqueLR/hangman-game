@@ -11,7 +11,7 @@ sudo apt-get -y update \
 && pip install -r ./requirements.txt \
 && cp ./env/supervisord/supervisord.conf /etc/supervisord.conf \
 && find . -name "*.sqlite3" | xargs rm -f \
-&& ./app/manage.py collectstatic --settings=conf.settings_production --noinput \
+&& ./app/manage.py collectstatic --noinput \
 && ./app/manage.py makemigrations --settings=conf.settings_production \
 && ./app/manage.py migrate --settings=conf.settings_production \
 && ./app/conf/populate_words.py --conf=settings_production

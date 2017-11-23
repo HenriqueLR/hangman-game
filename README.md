@@ -58,17 +58,15 @@ development:
 
 É possivel inserir palavras no jogo de duas maneiras:
 
-	1 - Carrege um ou mais arquivos como de
-		exemplo dentro do diretório /env/db/
+	1 - Carrege um ou mais arquivos como de exemplo '/env/db/words.csv',
+		dentro do diretório '/app/conf/static/uploads/file.csv'
 
-		ex: /env/db/words.csv
+		ex: /app/conf/static/uploads/words.csv
 		make populate_db
 
 	2 - Acesse a área do administrador
 		http://localhost/security - (production)*
 		http://localhost:8008/security - (local)*
-		login: root
-		senha: root
 
 
 ##### Comandos
