@@ -18,14 +18,15 @@ collectstatic:
 	./conf/cfg.py collectstatic
 
 populate_db:
-	@./app/manage.py collectstatic --noinput ;\
 	./app/conf/populate_words.py --conf=$(settings) ;\
 
-clean_db:
+clean_db: remove_migrations clean
 	./conf/cfg.py clean_db
 
 create_db:
 	./conf/cfg.py create_db makemigrations,migrate $(settings)
+
+reset_db: clean_db clean_csv_files create_db create_superuser
 
 connect:
 	./conf/cfg.py connect
@@ -35,3 +36,9 @@ create_superuser:
 
 permissions:
 	./conf/cfg.py permissions
+
+remove_migrations:
+	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+
+clean_csv_files:
+	find ./app/conf/media/uploads/ -name "*.csv" | xargs rm -f

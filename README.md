@@ -58,15 +58,20 @@ development:
 
 É possivel inserir palavras no jogo de duas maneiras:
 
-	1 - Carrege um ou mais arquivos como de exemplo '/env/db/words.csv',
-		dentro do diretório '/app/conf/static/uploads/file.csv'
+	1 - Carrege um ou mais arquivos dentro
+		do diretório '/env/db/words.csv'
 
-		ex: /app/conf/static/uploads/words.csv
+		ex: /env/db/words.csv
+			/env/db/words2.csv
+
 		make populate_db
 
 	2 - Acesse a área do administrador
 		http://localhost/security - (production)*
 		http://localhost:8008/security - (local)*
+
+		Para fazer upload dos arquivos, ou inserir palavra
+		por palavra.
 
 
 ##### Comandos
@@ -106,6 +111,9 @@ development:
 
 * muda as permissões dos arquivos cfg.py / *.sh
 
+9 - reset_db settings=[local/production]
+
+* zera o banco de dados, juntamente com o login de super usuario
 
 ##### Descrição
 

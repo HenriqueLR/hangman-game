@@ -3,7 +3,7 @@
 
 import os, sys, csv, django, argparse
 from django.db.utils import IntegrityError
-from settings import STATIC_ROOT, BASE_DIR
+from settings import BASE_DIR
 
 settings = {'local':'settings', 'production':'settings_production'}
 parser = argparse.ArgumentParser(description='Populate words csv file in database')
@@ -27,14 +27,14 @@ class PopulateDB(object):
 	_msg_error_integrity = str()
 
 	def get_path(self):
-		return os.path.join(STATIC_ROOT, 'uploads')
+		return os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'env/db')
 
 	def get_files(self):
 		return filter(lambda x: x.endswith('.csv'), os.listdir(self.get_path()))
 
 	def insert_word(self, word):
 		try:
-			return Words(word=word).save()
+			Words(word=word).save()
 		except IntegrityError as e:
 			self._total_errors_integrity += 1
 			self._msg_error_integrity = e.message
@@ -58,6 +58,8 @@ if __name__ == '__main__':
 		if populate._total_errors_integrity:
 			print ('Total de palavras repetidas: %s\nError: %s') % \
 				(populate._total_errors_integrity, populate._msg_error_integrity)
-	except Exception as error:
-		print error
+	except KeyError as e:
+		print 'Verify csv file section [word] ex: /env/db/word.csv'
+	except Exception as e:
+		print e.message
 		pass

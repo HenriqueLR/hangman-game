@@ -6,7 +6,7 @@ upstream app {
 server {
     listen 80 default_server;
     listen [::]:80 default_server ipv6only=on;
-    client_max_body_size 4G;
+    client_max_body_size 1M;
     keepalive_timeout 5;
     server_name localhost;
 
