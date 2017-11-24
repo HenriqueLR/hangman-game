@@ -3,3 +3,4 @@ gunicorn
 supervisor
 uwsgi
 docker-compose
+Sphinx
