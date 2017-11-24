@@ -1,0 +1,13 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+    container_name: hangman
+    image: hangman:v.0.1
+    ports:
+      - 80:80
+    volumes:
+      - .:/deploy/apps/hangman-game
+    command:
+      ./env/services.sh uwsgi production
