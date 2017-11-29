@@ -42,3 +42,6 @@ remove_migrations:
 
 clean_csv_files:
 	find ./app/conf/media/uploads/ -name "*.csv" | xargs rm -f
+
+doc:
+	@sphinx-build -E -W -c docs/source/ -b html docs/source/ docs/build/html

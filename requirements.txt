@@ -4,3 +4,4 @@ supervisor
 uwsgi
 docker-compose
 Sphinx
+requests[security]

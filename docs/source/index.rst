@@ -3,8 +3,9 @@ Guide Start
 ==========================
 .. toctree::
 
-	commands
+    commands
 
+    startguide
 
 ==========================
 License
